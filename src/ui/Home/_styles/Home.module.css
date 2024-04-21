@@ -1,0 +1,60 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    text-align: center;
+    /* Ensures text is always centered */
+}
+
+.title {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
+    /* Larger font size for better readability */
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+.button:active {
+    transform: scale(0.98);
+}
+
+.button:focus {
+    outline: none;
+}
+
+@media (min-width: 768px) {
+    .button {
+        padding: 15px 30px;
+        /* Larger buttons for easier interaction on desktop */
+        font-size: 18px;
+        /* Increase font size for desktop */
+        margin: 20px;
+        /* More spacing between buttons */
+    }
+}
+
+@media (min-width: 1024px) {
+    .title {
+        font-size: 24px;
+        /* Larger title on large screens */
+    }
+}

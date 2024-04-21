@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from './_styles/Home.module.css';
 
 const HomeView: React.FC = () => {
     const [batteryLevel, setBatteryLevel] = useState<number>(100); // Mock battery level
@@ -20,11 +21,11 @@ const HomeView: React.FC = () => {
     };
 
     return (
-        <div>
-            <h1>Home Screen</h1>
-            <button onClick={handleOpenDoor}>Open Door</button>
-            <button onClick={checkBattery}>Check Battery</button>
-            <button onClick={navigateToUserManagement}>Add Users</button>
+        <div className={styles.container}>
+            <h1 className={styles.title}>Onna Living</h1>
+            <button className={styles.button} onClick={handleOpenDoor}>Open Door</button>
+            <button className={styles.button} onClick={checkBattery}>Check Battery</button>
+            <button className={styles.button} onClick={navigateToUserManagement}>Add Users</button>
         </div>
     );
 };
