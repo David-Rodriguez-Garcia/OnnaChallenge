@@ -57,6 +57,7 @@ export const LockListView: React.FC = () => {
 
     return (
         <div className={styles.container}>
+            <img src="https://www.onnahome.com/wp-content/uploads/2022/02/lOGO_AZUL.png" alt="Onna Home Logo" className={styles.logoImage} />
             <h1 className={styles.title}>Locks List</h1>
             {locks.map(lock => (
                 <button key={lock.lockId} className={styles.lockButton} onClick={() => handleLockClick(lock)}>

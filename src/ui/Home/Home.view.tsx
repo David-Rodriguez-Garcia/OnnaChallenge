@@ -47,6 +47,7 @@ const HomeView: React.FC = () => {
 
     return (
         <div className={styles.container}>
+            <img src="https://www.onnahome.com/wp-content/uploads/2022/02/lOGO_AZUL.png" alt="Onna Home Logo" className={styles.logoImage} />
             <h1 className={styles.title}>{lockDetails.lockAlias || 'None Selected'}</h1>
             <button className={styles.button} onClick={handleUnlockDoor}>Open Door</button>
             <button className={styles.button} onClick={handleLockDoor}>Close Door</button>

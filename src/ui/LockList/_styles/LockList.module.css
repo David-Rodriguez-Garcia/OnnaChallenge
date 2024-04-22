@@ -9,6 +9,14 @@
     text-align: center;
 }
 
+.logoImage {
+    display: block;
+    max-width: 200px;
+    /* Control the size of the image */
+    margin: 0 auto 20px;
+    /* Center the image horizontally and add some margin below */
+}
+
 .title {
     color: #333;
     margin-bottom: 20px;

@@ -8,7 +8,12 @@
     font-family: 'Arial', sans-serif;
     padding: 20px;
     text-align: center;
-    /* Ensures text is always centered */
+}
+
+.logoImage {
+    display: block;
+    max-width: 200px;
+    margin: 0 auto 20px;
 }
 
 .title {
