@@ -1,0 +1,45 @@
+import { clientId, accessToken } from "./data";
+import axios from 'axios';
+
+// Define an interface for the function response to improve type safety and readability
+interface PasswordResponse {
+    keyboardPwdId: number;
+    keyboardPwd: string;
+}
+
+/**
+ * Generates a random password for a specified lock.
+ * @param clientId The client identifier.
+ * @param token Access token for the API.
+ * @param access_token Another form of access token required by the API.
+ * @param lockId The unique identifier for the lock.
+ * @param startDate The start date for the password validity.
+ * @param endDate The end date for the password validity.
+ * @returns A promise that resolves to the password details.
+ */
+export const createPassword = async (lockId: number, startDate: string, endDate: string): Promise<PasswordResponse> => {
+    const url = `https://api.rentandpass.com/api/password`;
+
+    try {
+        const params = {
+            clientId,
+            token: accessToken,
+            access_token: accessToken,
+            ID: lockId,
+            type: 3,
+            startDate,
+            endDate
+        };
+
+        const response = await axios.get<PasswordResponse>(url, { params });
+
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            throw new Error('Failed to generate password');
+        }
+    } catch (error) {
+        console.error('Error generating password:', error);
+        throw new Error('Failed to generate password due to an API error');
+    }
+};

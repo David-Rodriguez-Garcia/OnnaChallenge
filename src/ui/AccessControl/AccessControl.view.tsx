@@ -6,6 +6,7 @@ import styles from './_styles/AccessControl.module.css'; // Import the styles
 import { format } from 'date-fns';
 import { useLockContext } from '../_context/LockContext'; // Adjust the path according to your project structure
 import { getLockPasswords } from '../../core/infrastructure/getLockPasswords';
+import { createPassword } from '../../core/infrastructure/createPassword';
 
 interface Code {
     id: number;
@@ -25,26 +26,22 @@ const AccessControlView: React.FC = () => {
     const navigate = useNavigate();
 
     if (!lockDetails || !lockDetails.lockId) {
-        // Handle case where no lock is selected yet
         return <a href='/'>Please select a lock first.</a>;
     }
+    const lockId = lockDetails.lockId
 
     useEffect(() => {
-        const { lockId } = lockDetails; // Example lock ID
-
-        getLockPasswords(lockId!)
+        getLockPasswords(lockId)
             .then(setCodes)
             .catch(error => setError(error.message));
     }, []);
 
-    const addCode = () => {
-        const newCodeEntry: Code = {
-            id: codes.length + 1, // Simple incrementing ID
-            value: newCode,
-            startDate: startDate,
-            endDate: endDate
-        };
-        setCodes([...codes, newCodeEntry]);
+    const addCode = async () => {
+        await createPassword(lockId, startDate.toISOString(), endDate.toISOString())
+
+        getLockPasswords(lockId)
+            .then(setCodes)
+            .catch(error => setError(error.message));
         setNewCode(''); // Reset input field
         setStartDate(new Date()); // Reset start date to today
         setEndDate(new Date()); // Reset end date to today
