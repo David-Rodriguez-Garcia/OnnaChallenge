@@ -1,54 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import styles from './_styles/AccessControl.module.css'; // Import the styles
 import { format } from 'date-fns';
+import { useLockContext } from '../_context/LockContext'; // Adjust the path according to your project structure
+import { getLockPasswords } from '../../core/infrastructure/getLockPasswords';
 
-interface User {
+interface Code {
     id: number;
-    name: string;
+    value: string;
     startDate: Date;
     endDate: Date;
 }
 
 const AccessControlView: React.FC = () => {
-    const [users, setUsers] = useState<User[]>([]);
-    const [newUserName, setNewUserName] = useState<string>('');
+    const { lockDetails } = useLockContext(); // Use the selected lock details
+    const [codes, setCodes] = useState<Code[]>([]);
+    const [newCode, setNewCode] = useState<string>('');
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
+    const [error, setError] = useState('');
+
     const navigate = useNavigate();
 
-    const addUser = () => {
-        const newUser: User = {
-            id: users.length + 1,
-            name: newUserName,
+    if (!lockDetails || !lockDetails.lockId) {
+        // Handle case where no lock is selected yet
+        return <a href='/'>Please select a lock first.</a>;
+    }
+
+    useEffect(() => {
+        const { lockId } = lockDetails; // Example lock ID
+
+        getLockPasswords(lockId!)
+            .then(setCodes)
+            .catch(error => setError(error.message));
+    }, []);
+
+    const addCode = () => {
+        const newCodeEntry: Code = {
+            id: codes.length + 1, // Simple incrementing ID
+            value: newCode,
             startDate: startDate,
             endDate: endDate
         };
-        setUsers([...users, newUser]);
-        setNewUserName('');
-        setStartDate(new Date());
-        setEndDate(new Date());
+        setCodes([...codes, newCodeEntry]);
+        setNewCode(''); // Reset input field
+        setStartDate(new Date()); // Reset start date to today
+        setEndDate(new Date()); // Reset end date to today
     };
 
-    const deleteUser = (id: number) => {
-        setUsers(users.filter(user => user.id !== id));
+    const deleteCode = (id: number) => {
+        setCodes(codes.filter(code => code.id !== id));
     };
 
     const goBack = () => {
-        navigate(-1);
+        navigate(-1); // Navigate back to the previous page
     };
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>User Management</h1>
+            <h1 className={styles.title}>Code Management for {lockDetails.lockAlias || 'Selected Lock'}</h1>
             <input
                 type="text"
                 className={styles.inputField}
-                value={newUserName}
-                onChange={(e) => setNewUserName(e.target.value)}
-                placeholder="Enter user name"
+                value={newCode}
+                onChange={(e) => setNewCode(e.target.value)}
+                placeholder="Enter new code"
             />
             <div>
                 <label>Start Date: </label>
@@ -66,14 +84,14 @@ const AccessControlView: React.FC = () => {
                     onChange={(date: Date) => setEndDate(date)}
                 />
             </div>
-            <button className={styles.button} onClick={addUser}>Add User</button>
+            <button className={styles.button} onClick={addCode}>Add Code</button>
             <ul>
-                {users.map(user => (
-                    <li key={user.id} className={styles.listItem}>
+                {codes.map(code => (
+                    <li key={code.id} className={styles.listItem}>
                         <span className={styles.userDetails}>
-                            {user.name} ({format(user.startDate, 'MM/dd/yyyy')} - {format(user.endDate, 'MM/dd/yyyy')})
+                            {code.value} ({format(code.startDate, 'MM/dd/yyyy')} - {format(code.endDate, 'MM/dd/yyyy')})
                         </span>
-                        <button className={styles.button} onClick={() => deleteUser(user.id)}>Delete</button>
+                        <button className={styles.button} onClick={() => deleteCode(code.id)}>Delete</button>
                     </li>
                 ))}
             </ul>

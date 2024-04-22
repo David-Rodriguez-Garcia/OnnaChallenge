@@ -8,10 +8,10 @@ import { lockDoor } from '../../core/infrastructure/lockDoor';
 
 const HomeView: React.FC = () => {
     const { lockDetails } = useLockContext(); // Destructure to get lockDetails
-    const [batteryLevel, setBatteryLevel] = useState<number>(100); // Initial battery level
+    const [batteryLevel, setBatteryLevel] = useState<number>(75); // Initial battery level
     const navigate = useNavigate();
 
-    if (!lockDetails.lockId) {
+    if (!lockDetails || !lockDetails.lockId) {
         return <a href='/'>Navigate to the home page to select a lock</a>;
     }
 
