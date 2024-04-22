@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLocksList } from "./../../core/infrastructure/getLocksList.js"
-import { useLockContext } from '../_context/LockContext'; // Import the context hook
-import styles from './_styles/LockList.module.css'; // Assume the CSS module is in the same directory
+import { useLockContext } from '../_context/LockContext'; // Ensure path correctness
+import styles from './_styles/LockList.module.css'; // Ensure path correctness
 
 interface Lock {
     lockId: number;
@@ -22,8 +22,8 @@ export const LockListView: React.FC = () => {
     const [locks, setLocks] = useState<Lock[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const { setLockId } = useLockContext(); // Use context to set lock ID
-    const navigate = useNavigate(); // useHistory for navigation
+    const { setLockDetails } = useLockContext(); // Now using setLockDetails to set more than just the ID
+    const navigate = useNavigate(); // useNavigate for navigation
 
     useEffect(() => {
         const fetchLocks = async () => {
@@ -42,8 +42,13 @@ export const LockListView: React.FC = () => {
         fetchLocks();
     }, []);
 
-    const handleLockClick = (lockId: number) => {
-        setLockId(lockId); // Update context with the new lock ID
+    const handleLockClick = (lock: Lock) => {
+        // Now setting all details in the context
+        setLockDetails({
+            lockId: lock.lockId,
+            lockAlias: lock.lockAlias,
+            lockName: lock.lockName
+        });
         navigate('/home'); // Navigate to HomeScreen
     };
 
@@ -54,7 +59,7 @@ export const LockListView: React.FC = () => {
         <div className={styles.container}>
             <h1 className={styles.title}>Locks List</h1>
             {locks.map(lock => (
-                <button key={lock.lockId} className={styles.lockButton} onClick={() => handleLockClick(lock.lockId)}>
+                <button key={lock.lockId} className={styles.lockButton} onClick={() => handleLockClick(lock)}>
                     <h2>{lock.lockAlias} (ID: {lock.lockId})</h2>
                     <div className={styles.lockDetails}>
                         <p>Electric Quantity: {lock.electricQuantity}%</p>

@@ -1,8 +1,14 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-interface LockContextType {
+interface LockDetails {
     lockId: number | null;
-    setLockId: (id: number | null) => void;
+    lockAlias: string | null;
+    lockName: string | null;
+}
+
+interface LockContextType {
+    lockDetails: LockDetails;
+    setLockDetails: (details: LockDetails) => void;
 }
 
 const LockContext = createContext<LockContextType | undefined>(undefined);
@@ -16,10 +22,10 @@ export const useLockContext = () => {
 }
 
 export const LockProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [lockId, setLockId] = useState<number | null>(null);
+    const [lockDetails, setLockDetails] = useState<LockDetails>({ lockId: null, lockAlias: null, lockName: null });
 
     return (
-        <LockContext.Provider value={{ lockId, setLockId }}>
+        <LockContext.Provider value={{ lockDetails, setLockDetails }}>
             {children}
         </LockContext.Provider>
     );
