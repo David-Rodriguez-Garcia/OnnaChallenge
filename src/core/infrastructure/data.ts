@@ -1,0 +1,2 @@
+export const clientId = 'NMVbynLXxNLwoP0XVYFX72PIuhi1FBTIf6V'
+export const accessToken = '5882902affd7198c9bb0a7fe359f66c3a73dd8783948d7b83f6279136f653706'

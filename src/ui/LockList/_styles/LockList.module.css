@@ -1,0 +1,43 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    padding: 20px;
+    text-align: center;
+}
+
+.title {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.lockButton {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.lockButton:hover {
+    background-color: #0056b3;
+}
+
+.lockButton:active {
+    transform: scale(0.98);
+}
+
+.lockButton:focus {
+    outline: none;
+}
+
+.lockDetails {
+    margin-bottom: 5px;
+}
