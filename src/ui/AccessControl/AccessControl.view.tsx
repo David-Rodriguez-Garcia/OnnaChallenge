@@ -1,12 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import styles from './_styles/AccessControl.module.css'; // Import the styles
+import styles from './_styles/AccessControl.module.css';
 import { format } from 'date-fns';
-import { useLockContext } from '../_context/LockContext'; // Adjust the path according to your project structure
+import { useLockContext } from '../_context/LockContext';
 import { getLockPasswords } from '../../core/infrastructure/getLockPasswords';
 import { createPassword } from '../../core/infrastructure/createPassword';
+import { deletePassword } from '../../core/infrastructure/deletePassword';
 
 interface Code {
     id: number;
@@ -16,12 +17,10 @@ interface Code {
 }
 
 const AccessControlView: React.FC = () => {
-    const { lockDetails } = useLockContext(); // Use the selected lock details
+    const { lockDetails } = useLockContext();
     const [codes, setCodes] = useState<Code[]>([]);
-    const [newCode, setNewCode] = useState<string>('');
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
-    const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
@@ -33,38 +32,33 @@ const AccessControlView: React.FC = () => {
     useEffect(() => {
         getLockPasswords(lockId)
             .then(setCodes)
-            .catch(error => setError(error.message));
+            .catch(error => console.log(error.message));
     }, []);
 
     const addCode = async () => {
-        await createPassword(lockId, startDate.toISOString(), endDate.toISOString())
+        const { keyboardPwd, keyboardPwdId } = await createPassword(lockId, startDate.toISOString(), endDate.toISOString())
+
+        setCodes([...codes, { id: keyboardPwdId, value: keyboardPwd, startDate, endDate }])
 
         getLockPasswords(lockId)
             .then(setCodes)
-            .catch(error => setError(error.message));
-        setNewCode(''); // Reset input field
+            .catch(error => console.log(error.message));
         setStartDate(new Date()); // Reset start date to today
         setEndDate(new Date()); // Reset end date to today
     };
 
-    const deleteCode = (id: number) => {
-        setCodes(codes.filter(code => code.id !== id));
+    const deleteCode = async (passwordId: number) => {
+        await deletePassword(lockId, passwordId)
+        setCodes(codes.filter(code => code.id !== passwordId));
     };
 
     const goBack = () => {
-        navigate(-1); // Navigate back to the previous page
+        navigate(-1);
     };
 
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>Code Management for {lockDetails.lockAlias || 'Selected Lock'}</h1>
-            <input
-                type="text"
-                className={styles.inputField}
-                value={newCode}
-                onChange={(e) => setNewCode(e.target.value)}
-                placeholder="Enter new code"
-            />
             <div>
                 <label>Start Date: </label>
                 <DatePicker
