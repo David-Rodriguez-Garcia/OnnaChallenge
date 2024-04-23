@@ -1,1 +1,1 @@
-# By David Rodriguez Garcia
+# By David Rodríguez García
