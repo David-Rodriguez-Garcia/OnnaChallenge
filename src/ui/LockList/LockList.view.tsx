@@ -61,10 +61,9 @@ export const LockListView: React.FC = () => {
             <h1 className={styles.title}>Locks List</h1>
             {locks.map(lock => (
                 <button key={lock.lockId} className={styles.lockButton} onClick={() => handleLockClick(lock)}>
-                    <h2>{lock.lockAlias} (ID: {lock.lockId})</h2>
+                    <h2>{lock.lockAlias}</h2>
                     <div className={styles.lockDetails}>
                         <p>Electric Quantity: {lock.electricQuantity}%</p>
-                        <p>Lock Data: {lock.lockData.substring(0, 50)}...</p>
                     </div>
                 </button>
             ))}

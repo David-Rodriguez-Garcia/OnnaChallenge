@@ -8,6 +8,7 @@ import { useLockContext } from '../_context/LockContext';
 import { getLockPasswords } from '../../core/infrastructure/getLockPasswords';
 import { createPassword } from '../../core/infrastructure/createPassword';
 import { deletePassword } from '../../core/infrastructure/deletePassword';
+import { getInThreeDays } from '../../core/infrastructure/getInThreeDays';
 
 interface Code {
     id: number;
@@ -20,7 +21,7 @@ const AccessControlView: React.FC = () => {
     const { lockDetails } = useLockContext();
     const [codes, setCodes] = useState<Code[]>([]);
     const [startDate, setStartDate] = useState<Date>(new Date());
-    const [endDate, setEndDate] = useState<Date>(new Date());
+    const [endDate, setEndDate] = useState<Date>(getInThreeDays);
 
     const navigate = useNavigate();
 
@@ -44,7 +45,7 @@ const AccessControlView: React.FC = () => {
             .then(setCodes)
             .catch(error => console.log(error.message));
         setStartDate(new Date()); // Reset start date to today
-        setEndDate(new Date()); // Reset end date to today
+        setEndDate(getInThreeDays()); // Reset end date to today
     };
 
     const deleteCode = async (passwordId: number) => {

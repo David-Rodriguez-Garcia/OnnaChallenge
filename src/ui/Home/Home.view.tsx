@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLockContext } from '../_context/LockContext'; // Adjust the path according to your project structure
 import styles from './_styles/Home.module.css';
@@ -8,7 +8,6 @@ import { lockDoor } from '../../core/infrastructure/lockDoor';
 
 const HomeView: React.FC = () => {
     const { lockDetails } = useLockContext(); // Destructure to get lockDetails
-    const [batteryLevel, setBatteryLevel] = useState<number>(75); // Initial battery level
     const navigate = useNavigate();
 
     if (!lockDetails || !lockDetails.lockId) {
@@ -33,7 +32,6 @@ const HomeView: React.FC = () => {
         try {
             const response = await getBatteryLevel(lockDetails.lockId);
             const { electricQuantity } = response.data;
-            setBatteryLevel(electricQuantity);
             alert(`Battery level is ${electricQuantity}%`);
         } catch (error) {
             console.error('Failed to fetch battery level:', error);
